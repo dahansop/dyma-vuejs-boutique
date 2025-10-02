@@ -1,6 +1,6 @@
 export enum ECategories {
-    All = "all",
-    Gamer = "gamer",
-    Desktop = "desktop",
-    Streaming = "streaming"
-} 
+    ALL = "All",
+    DESKTOP = "Desktop",
+    GAMER = "Gamer",
+    STREAMING = "Streaming"
+}

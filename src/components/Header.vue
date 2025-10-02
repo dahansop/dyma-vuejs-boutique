@@ -6,10 +6,14 @@
     </a>
     <ul class="d-flex flex-row flex-fill">
       <li class="mr-10">
-        <a href="#">Boutique</a>
+        <a 
+          :class="{ active: page === EPages.BOUTIQUE}" 
+          @click="emit('navigate', EPages.BOUTIQUE)">Boutique</a>
       </li>
       <li>
-        <a href="#">Admin</a>
+        <a 
+          :class="{ active: page === EPages.ADMIN}"
+          @click="emit('navigate', EPages.ADMIN)">Admin</a>
       </li>
     </ul>
     <ul class="d-flex flex-row">
@@ -23,7 +27,18 @@
   </header>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { EPages } from '@/interfaces/EPages.enum.ts';
+
+defineProps<{
+  page: EPages
+}>();
+
+const emit = defineEmits<{
+  (e: 'navigate', page: EPages): void;
+}>();
+
+</script>
 
 <style lang="scss" scoped>
 header {
@@ -38,6 +53,9 @@ header {
       font-weight: 700;
       font-size: 20px;
     }
+  }
+  a.active {
+    text-decoration: underline;
   }
 }
 </style>

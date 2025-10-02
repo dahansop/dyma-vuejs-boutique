@@ -29,7 +29,7 @@
     </section>
     <section class="mb-20 flex-fill">
       <h3 class="mb-10">Filtrer par catégorie</h3>
-      <div class="mb-5" v-for="category in categories" :key="category">
+      <div class="mb-5" v-for="category in ECategories" :key="category">
         <input 
           type="radio"
           name="catogry"

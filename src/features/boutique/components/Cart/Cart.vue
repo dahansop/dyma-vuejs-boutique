@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import CartProductList from './CartProductList.vue';
 import type { IProductCart } from './interfaces';
-
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -20,7 +19,7 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'removeProductToCart', productId: number): void;
+  (e: 'removeProductToCart', productId: string): void;
 }>();
 
 const totalPrice = computed(() => 

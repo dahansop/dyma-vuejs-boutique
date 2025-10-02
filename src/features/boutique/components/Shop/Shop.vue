@@ -6,7 +6,7 @@
       :nbr-of-products="products.length"
       @update-filter="emit('updateFilter', $event)"/>
     <ShopProductList 
-      class="flex-fill"
+      class="flex-fill scrollable"
       :products="products"
       @add-product-to-cart="emit('addProductToCart', $event)"/>
   </div>
@@ -23,7 +23,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  (e: 'addProductToCart', productId: number): void;
+  (e: 'addProductToCart', productId: string): void;
   (e: 'updateFilter', filter: IFilterUpdate): void;
 }>();
 
@@ -32,5 +32,10 @@ const emit = defineEmits<{
 <style lang="scss" scoped>
 .shop-filter {
   flex: 0 0 200px;
+}
+
+.scrollable {
+  overflow-y: auto;
+  height: calc(100vh - 48px);
 }
 </style>
