@@ -7,8 +7,10 @@
     <TheHeader class="header" />
     <Shop 
       class="shop"
-      :products="state.products"
-      @add-product-to-cart="addProductToCart"/>
+      :products="filteredProducts"
+      :filters="state.filters"
+      @add-product-to-cart="addProductToCart"
+      @update-filter="updateShopFilters"/>
     <Cart 
       v-if="!cartEmpty"
       class="cart"
@@ -23,20 +25,33 @@ import TheHeader from './components/Header.vue';
 import TheFooter from './components/Footer.vue';
 import Shop from './components/Shop/Shop.vue';
 import Cart from './components/Cart/Cart.vue';
-import type { IProduct, IProductCart } from './interfaces';
-import data from './data/productListData';
+import type { IProduct, IProductCart, IFilters, IFilterUpdate } from './interfaces';
+import dataProduct from './data/productListData';
+import { DEFAULT_FILTER } from './data/filtersProduct';
 
 import { reactive, computed } from 'vue';
 
 const state = reactive<{
   products: IProduct[],
-  cart: IProductCart[]
+  cart: IProductCart[],
+  filters: IFilters
 }>({
-  products: data,
-  cart: []
+  products: dataProduct,
+  cart: [],
+  filters: {...DEFAULT_FILTER}
 });
 
 const cartEmpty = computed(() => state.cart.length === 0);
+
+const filteredProducts = computed(() => {
+  return state.products.filter((product) => {
+      return (product.title.toLocaleLowerCase().startsWith(state.filters.title.toLocaleLowerCase())
+        && product.price >= state.filters.priceRange[0]
+        && product.price <= state.filters.priceRange[1]
+        && (product.category === state.filters.category || state.filters.category === 'all')
+      );
+  });
+});
 
 function addProductToCart(productId: number): void {
   const product = state.products.find((product) => product.id === productId);
@@ -56,6 +71,18 @@ function removeProductToCart(productId: number): void {
     state.cart = state.cart.filter((product) => product.id !== productId);
   } else {
     productCart.quantity--;
+  }
+}
+
+function updateShopFilters(filters: IFilterUpdate): void {
+  if (filters.title !== undefined) {
+    state.filters.title = filters.title;
+  }else if (filters.priceRange !== undefined) {
+    state.filters.priceRange = filters.priceRange;
+  }else if (filters.category !== undefined) {
+    state.filters.category = filters.category;
+  } else {
+    state.filters = { ...DEFAULT_FILTER };
   }
 }
 
