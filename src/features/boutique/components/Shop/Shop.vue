@@ -8,7 +8,9 @@
     <ShopProductList 
       class="flex-fill scrollable"
       :products="products"
-      @add-product-to-cart="emit('addProductToCart', $event)"/>
+      :is-more-results="isMoreResults"
+      @add-product-to-cart="emit('addProductToCart', $event)"
+      @inc-page="emit('incPage', $event)"/>
   </div>
 </template>
 
@@ -19,12 +21,14 @@ import type { IProduct, IFilters, IFilterUpdate } from './interfaces';
 
 defineProps<{
   products: IProduct[],
-  filters: IFilters
+  filters: IFilters,
+  isMoreResults: boolean,
 }>();
 
 const emit = defineEmits<{
   (e: 'addProductToCart', productId: string): void;
   (e: 'updateFilter', filter: IFilterUpdate): void;
+  (e: 'incPage'): void;
 }>();
 
 </script>

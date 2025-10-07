@@ -21,8 +21,8 @@ import TheFooter from './components/Footer.vue';
 import Boutique from './features/boutique/Boutique.vue';
 import Admin from './features/admin/Admin.vue';
 import { EPages } from '@/interfaces/EPages.enum.ts';
-import { seed } from '@/data/seed';
-import { reactive, type Component as C, inject } from 'vue';
+import { seed, seed40Products } from '@/data/seed';
+import { reactive, type Component as C } from 'vue';
 
 const state = reactive<{
   page: EPages
@@ -40,10 +40,10 @@ function navigate(page: EPages): void {
 }
 
 // a ne lancer qu'une fois pour la création des produits. (ils sont détruits toutes les 10 heures)
-//const urlApiProduct = inject<String>('PRODUCT_API_URL')!;
-//seed('urlApiProduct');
-
+//seed();
+//seed40Products();
 </script>
+
 
 
 <style lang="scss">

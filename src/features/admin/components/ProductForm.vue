@@ -41,9 +41,7 @@ import { z } from 'zod';
 import { useForm, useField } from 'vee-validate';
 import { toFormValidator } from '@vee-validate/zod';
 import { ECategories } from '@/interfaces/ECategories.enum.ts';
-import { inject } from 'vue';
-
-const urlApiProduct = inject<String>('PRODUCT_API_URL')!;
+import { createProduct } from '@/shared/services/products.service';
 
 //const firstInput = ref<HTMLInputElement | null>(null);
 //onMounted(() => {
@@ -73,16 +71,9 @@ const category = useField('category');
 
 const submitProductForm = handleSubmit(async (formValues, { resetForm }) => {
   try {
-    const response = await fetch(urlApiProduct, {
-      method: 'POST',
-      body: JSON.stringify(formValues),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
     // recupération du produit
-    const product: IProduct = await response.json();
-
+    const product: IProduct = createProduct(JSON.stringify(formValues));
+    // reset du formulaire
     resetForm();
     //firstInput.value?.focus();
   } catch (e) {

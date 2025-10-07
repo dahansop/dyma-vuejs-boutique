@@ -3,8 +3,10 @@
     <Shop 
       :products="filteredProducts"
       :filters="state.filters"
+      :is-more-results="state.isMoreResults"
       @add-product-to-cart="addProductToCart"
-      @update-filter="updateShopFilters" />
+      @update-filter="updateShopFilters"
+      @inc-page="state.page++" />
     <Cart 
       v-if="!cartEmpty"
       class="cart"
@@ -16,46 +18,68 @@
 <script setup lang="ts">
 import Shop from './components/Shop/Shop.vue';
 import Cart from './components/Cart/Cart.vue';
-import type { IProduct, IProductCart, IFilters, IFilterUpdate } from '../../interfaces';
+import type { IProduct, IProductCart, IFilters, IFilterUpdate } from '@/interfaces';
 import { ECategories } from '@/interfaces/ECategories.enum.ts';
 import { DEFAULT_FILTER } from './data/filtersProduct';
-import { reactive, computed, inject } from 'vue';
+import { fetchProducts } from '@/shared/services/products.service';
+import { pageKey } from '@/shared/injectionKeys/pageKey';
+import { reactive, computed, watchEffect, watch, provide, toRef } from 'vue';
 
-// URL de l'APi produit
-const urlApiProduct = inject<String>('PRODUCT_API_URL')!;
 
 // définition du contexte
 const state = reactive<{
-  products: IProduct[],
-  cart: IProductCart[],
-  filters: IFilters
+  products: IProduct[];
+  cart: IProductCart[];
+  filters: IFilters;
+  page: number;
+  isMoreResults: boolean;
+  isLoading: boolean;
 }>({
   products: [],
   cart: [],
-  filters: {...DEFAULT_FILTER}
+  filters: {...DEFAULT_FILTER},
+  page: 1,
+  isLoading: true,
+  isMoreResults: true
 });
 
-// récuparation de la liste des produits depuis l'API
-const listProducts = await (await fetch(urlApiProduct)).json();
-if (Array.isArray(listProducts)) {
-  state.products = listProducts;
-} else {
-  state.products = [listProducts];
-}
+// référence pour la page
+provide(pageKey, toRef(state, 'page'));
+
+// Réinitialise la pagination quand un filtre change
+watch(state.filters, () => {
+  state.page = 1;
+  state.products = [];
+  state.isMoreResults = true;
+});
+
+// Récupère la liste des produits depuis l'API. Vue la mets à jour à chaque modif du filtre
+watchEffect(async () => {
+  state.isLoading = true;
+  const listProducts = await fetchProducts(state.filters, state.page);
+  if (Array.isArray(listProducts)) {
+    state.products = [...state.products, ...listProducts];
+  } else {
+    state.products = [...state.products, listProducts];
+  }
+  // TODO utiliser un paramètre dans l'application
+  if (listProducts.length < 20) {
+    state.isMoreResults = false;
+  }
+
+  state.isLoading = false;
+});
+
+// liste des produits avec filtres appliqués. applique uniquement le filtre du titre
+// TODO a supprimer pour le mettre dans l'appel de l'API
+const filteredProducts = computed(() => {
+  return state.products.filter((product) => {
+      return (product.title.toLocaleLowerCase().startsWith(state.filters.title.toLocaleLowerCase()));
+  });
+});
 
 // indique si le panier est vide
 const cartEmpty = computed(() => state.cart.length === 0);
-
-// liste des produits avec filtres appliqués
-const filteredProducts = computed(() => {
-  return state.products.filter((product) => {
-      return (product.title.toLocaleLowerCase().startsWith(state.filters.title.toLocaleLowerCase())
-        && product.price >= state.filters.priceRange[0]
-        && product.price <= state.filters.priceRange[1]
-        && (product.category === state.filters.category || state.filters.category === ECategories.ALL)
-      );
-  });
-});
 
 // Ajoute un produit dans le panier
 function addProductToCart(productId: string): void {
