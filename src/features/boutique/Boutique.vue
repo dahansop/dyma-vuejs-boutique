@@ -1,5 +1,5 @@
 <template>
-  <div class="boutique-container" :class="{ 'grid-empty': cartEmpty }">
+  <div class="d-flew flex-column">
     <Shop 
       :products="filteredProducts"
       :filters="state.filters"
@@ -7,9 +7,8 @@
       @add-product-to-cart="addProductToCart"
       @update-filter="updateShopFilters"
       @inc-page="state.page++" />
-    <Cart 
+    <Cart
       v-if="!cartEmpty"
-      class="cart"
       :cart="state.cart"
       @remove-product-to-cart="removeProductToCart" />
   </div>
@@ -120,17 +119,5 @@ function updateShopFilters(filters: IFilterUpdate): void {
 
 
 <style scoped lang="scss">
-.boutique-container {
-  display: grid;
-  grid-template-columns: 75% 25%;
-}
 
-.grid-empty {
-  grid-template-columns: 100%;
-}
-
-.cart {
-  background-color: white;
-  border-left: var(--border);
-}
 </style>

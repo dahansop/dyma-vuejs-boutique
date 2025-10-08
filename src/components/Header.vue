@@ -32,7 +32,7 @@
         <i class="fa-solid fa-bars show-xs"
           @click="state.openMenu = !state.openMenu">
         </i>
-        <transition>
+        <Transition>
           <ul @click="state.openMenu = false" v-if="state.openMenu" class="menu card">
             <li>
               <a 
@@ -51,7 +51,7 @@
               <a href="#">Connexion</a>
             </li>
           </ul>
-        </transition>
+        </Transition>
       </div>
     </div>
   </header>
