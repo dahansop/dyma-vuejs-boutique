@@ -18,7 +18,6 @@
 import Shop from './components/Shop/Shop.vue';
 import Cart from './components/Cart/Cart.vue';
 import type { IProduct, IProductCart, IFilters, IFilterUpdate } from '@/interfaces';
-import { ECategories } from '@/interfaces/ECategories.enum.ts';
 import { DEFAULT_FILTER } from './data/filtersProduct';
 import { fetchProducts } from '@/shared/services/products.service';
 import { pageKey } from '@/shared/injectionKeys/pageKey';
@@ -46,7 +45,7 @@ const state = reactive<{
 provide(pageKey, toRef(state, 'page'));
 
 // Réinitialise la pagination quand un filtre change
-watch(state.filters, () => {
+watch(() => state.filters.category && state.filters.priceRange, () => {
   state.page = 1;
   state.products = [];
   state.isMoreResults = true;

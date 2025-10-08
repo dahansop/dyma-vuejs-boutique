@@ -29,6 +29,10 @@
       </ul>
       <!-- Menu mobile -->
       <div class="menu-xs-container">
+        <Calc 
+          :open="state.openMenu"
+          :transparent="true"
+          @close="state.openMenu = false" />
         <i class="fa-solid fa-bars show-xs"
           @click="state.openMenu = !state.openMenu">
         </i>
@@ -60,6 +64,7 @@
 <script setup lang="ts">
 import { EPages } from '@/interfaces/EPages.enum.ts';
 import { reactive } from 'vue';
+import Calc from '@/components/Calc.vue';
 
 defineProps<{
   page: EPages
@@ -119,6 +124,7 @@ header {
   }
 
   .menu {
+    z-index: 2;
     position: absolute;
     top: 20px;
     right: 0px;

@@ -11,7 +11,7 @@
       </template>
     </Suspense>
     </div>
-    <TheFooter class="footer" />
+    <TheFooter class="footer hide-xs" />
   </div>
 </template>
 

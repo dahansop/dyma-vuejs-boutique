@@ -1,17 +1,16 @@
 <template>
-  <Transition mode="out-in">
-    <div class="cart-container">
+  <div class="cart-container">
+    <Transition mode="out-in">
       <div v-if="!state.openCart" 
         class="cart-holder d-flex flex-row justify-content-center align-items-center"
-        @click="state.openCart = !state.openCart;">
+        @click="state.openCart = !state.openCart">
         <span class="nb-product">{{ cart.length }}</span>
         <i class="fa-solid fa-cart-shopping"></i>
       </div>
       <div v-else>
-        <Teleport to="body">
-          <div class="calc"
-            @click="state.openCart = false;"></div>
-        </Teleport>
+        <Calc 
+          :open="state.openCart"
+          @close="state.openCart = false"/>
         <div class="p-20 ml-20 d-flex flex-column card">
           <h2 class="mb-10">Panier</h2>
           <CartProductList 
@@ -21,12 +20,13 @@
           <button class="btn btn-success">Commander ({{ totalPrice }}€)</button>
         </div>
       </div>
-    </div>
-  </Transition>
+    </Transition>
+  </div>
 </template>
 
 <script setup lang="ts">
 import CartProductList from './CartProductList.vue';
+import Calc from '@/components/Calc.vue';
 import type { IProductCart } from './interfaces';
 import { computed, reactive } from 'vue';
 
