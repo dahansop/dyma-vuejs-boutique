@@ -1,7 +1,7 @@
 import type { IProduct, IFilters } from '@/interfaces';
 import { ECategories } from '@/interfaces/ECategories.enum.ts';
 
-const urlApiProduct = 'https://restapi.fr/api/dsprojetproducts2';
+const urlApiProduct = 'https://restapi.fr/api/dsprojetproducts';
 
 /**
  * récupère la liste des produit en y appliquant les filtres et la pagination

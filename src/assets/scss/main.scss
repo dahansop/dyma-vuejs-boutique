@@ -1,3 +1,5 @@
+@use './mixins';
+
 :root {
   --primary-1: #3498db;
   --primary-2: #2980b9;
@@ -99,6 +101,13 @@ label {
   flex: 1 1 auto;
 }
 
+// masque des div pour les mobiles
+.hide-xs {
+  @include mixins.xs {
+    display: none;
+  }
+}
+
 // padding
 
 .p-10 {
@@ -187,7 +196,7 @@ label {
   }
 }
 
-// card
+// card - pop up
 
 .card {
   border-radius: var(--border-radius);

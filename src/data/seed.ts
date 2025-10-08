@@ -1,6 +1,7 @@
 import data from './productListData';
 
-const urlApiProduct = 'https://restapi.fr/api/dsprojetproducts2';
+const apiName = 'dsprojetproducts';
+const urlApiProduct = `https://restapi.fr/api/${apiName}`;
 const urlApiGenerator = 'https://restapi.fr/generator';
 
 /*export async function seed(collectionName: string) {
